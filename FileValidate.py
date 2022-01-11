@@ -1,4 +1,5 @@
 import hashlib
+import logging
 import os.path
 from loguru import logger
 
