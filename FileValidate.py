@@ -1,10 +1,13 @@
 import hashlib
-import logging
 import os.path
 from loguru import logger
+from tqdm import tqdm
 
 
 # 验证文件完整性
+
+
+
 class FileValidate:
 
     # 获取文件/目录大小
@@ -22,10 +25,25 @@ class FileValidate:
         logger.info("当前文件大小为: {0}MB".format(menu_size))
         return menu_size
 
-    # def validate(self, path_a, path_b):
+    def validate(self, path_a, path_b):
+        """
+        文件校验主程序，附带进度条
+        :param path_a: 文件路径a
+        :param path_b: 文件路径b
+        :return: none
+        """
+        sum_size = self.getFileSize(path_a)
+        self.bar = tqdm(total=sum_size, ncols=100, desc="验证进度", colour="green")
+        self.validateFile(path_a, path_b)
 
 
     def validateFile(self, path_a, path_b):
+        """
+        文件校验，通过文件的md5码进行验证，若出现不一致则报错
+        :param path_a: 文件路径a
+        :param path_b: 文件路径b
+        :return:none
+        """
         # 判断路径是否存在
         if not os.path.exists(path_a):
             logger.warning("[{0}]文件或目录不存在".format(path_a))
@@ -46,7 +64,10 @@ class FileValidate:
             if md5A.hexdigest() != md5B.hexdigest():
                 logger.warning("文件{0}与文件{1}内容不一致".format(path_a, path_b))
             else:
-                logger.info("文件{0}与文件{1}校验完成".format(path_a, path_b))
+                file_size = os.path.getsize(path_a) / 1024 / 1024
+                self.bar.update(file_size)
+            # else:
+            #     logger.info("文件{0}与文件{1}校验完成".format(path_a, path_b))
         # 若都是目录，则递归调用该函数
         if os.path.isdir(path_a) and os.path.isdir(path_b):
             paths_a = []
@@ -70,4 +91,4 @@ if __name__ == '__main__':
     filevalidate = FileValidate()
     path_a = r"D:\尚硅谷Java学科全套教程（总207.77GB）"
     path_b = r"F:\尚硅谷Java学科全套教程（总207.77GB）"
-    filevalidate.getFileSize(path_b)
+    filevalidate.validate(path_b, path_a)
