@@ -1,8 +1,7 @@
-from time import sleep
-from tqdm import tqdm
+import os.path
 
-# 这里同样的，tqdm就是这个进度条最常用的一个方法
-# 里面存一个可迭代对象
-for i in tqdm(range(0, 500), colour="white"):
-    # 模拟你的任务
-    sleep(0.01)
+folder_path = r"D:\CPU-Z"
+full_size = 0
+for parent, dirs, files in os.walk(folder_path):
+    full_size = sum(os.path.getsize(os.path.join(parent, file)) for file in files)
+print(full_size, "%.2f MB" % (full_size/1024/1024))
