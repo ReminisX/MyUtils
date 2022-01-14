@@ -5,16 +5,13 @@ from tqdm import tqdm
 
 
 # 验证文件完整性
-
-
-
 class FileValidate:
 
     # 获取文件/目录大小
     def getFileSize(self, path):
         if os.path.isfile(path):
             folder_size = os.path.getsize(path)
-            logger.info("当前文件大小为: {0}MB".format(folder_size/1024/1024))
+            logger.info("当前文件大小为: {0}MB".format(folder_size / 1024 / 1024))
             return folder_size
         menu_size = 0
         for parent, dirs, files in os.walk(path):
@@ -36,10 +33,9 @@ class FileValidate:
         self.bar = tqdm(total=sum_size, ncols=100, desc="验证进度", colour="green")
         self.validateFile(path_a, path_b)
 
-
     def validateFile(self, path_a, path_b):
         """
-        文件校验，通过文件的md5码进行验证，若出现不一致则报错
+        文件校验子程序，通过文件的md5码进行验证，若出现不一致则报错
         :param path_a: 文件路径a
         :param path_b: 文件路径b
         :return:none
